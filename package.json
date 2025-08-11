@@ -42,7 +42,7 @@
     "axios": "^1.6.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.2.1",
     "@types/ws": "^8.5.8",
     "@types/blessed": "^0.1.21",
     "@types/node-cron": "^3.0.11",
