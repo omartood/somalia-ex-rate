@@ -1,0 +1,55 @@
+{
+  "name": "somali-exchange-rates",
+  "version": "0.1.0",
+  "description": "Fetch, cache, format and convert Somali Shilling (SOS) exchange rates with offline fallback.",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "sosx": "dist/cli.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts src/cli.ts --format esm,cjs",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "somalia",
+    "sos",
+    "currency",
+    "exchange",
+    "rates",
+    "offline"
+  ],
+  "license": "MIT",
+  "author": "You",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.14.0",
+    "sqlite3": "^5.1.6",
+    "csv-writer": "^1.6.0",
+    "xlsx": "^0.18.5",
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/ws": "^8.5.8",
+    "@types/blessed": "^0.1.21",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.14",
+    "@vitest/coverage-v8": "^2.1.9",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,22 @@
+# Test artifacts
+test-cache/
+test-temp/
+*.test.db
+*.test.sqlite
+test-*.json
+test-*.csv
+test-*.xlsx
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Test logs
+test-*.log
+*.test.log
+
+# Temporary test files
+*.tmp
+*.temp
+temp-*
+tmp-*

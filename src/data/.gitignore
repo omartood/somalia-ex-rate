@@ -1,0 +1,16 @@
+# Sensitive data files
+api-keys.json
+secrets.json
+private-*.json
+
+# User-specific configurations
+user-config.json
+local-config.json
+
+# Cache files
+*.cache
+cache-*.json
+
+# Backup files
+*.bak
+seed.json.bak

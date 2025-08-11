@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+docs/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env*
+!.env.example
+
+# Test files
+src/__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Demo files
+*-demo.js
+demo*.js
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# Cache
+.cache/
+.npm/
+
+# Lock files (keep package-lock.json)
+yarn.lock
+pnpm-lock.yaml
+
+# Local config
+.sosx/
+local.json
+dev.json

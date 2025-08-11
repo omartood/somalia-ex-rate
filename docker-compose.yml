@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  sosx-app:
+    build: .
+    container_name: sosx-exchange-rates
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - SOSX_CACHE_TTL=21600000  # 6 hours
+      - SOSX_LOG_LEVEL=info
+    volumes:
+      - sosx-data:/home/sosx/.sosx
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "dist/cli.js", "rates"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  sosx-stream:
+    build: .
+    container_name: sosx-stream-server
+    command: ["node", "dist/cli.js", "stream", "8080"]
+    ports:
+      - "8081:8080"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - sosx-data:/home/sosx/.sosx
+    restart: unless-stopped
+    depends_on:
+      - sosx-app
+
+  sosx-monitor:
+    build: .
+    container_name: sosx-alert-monitor
+    command: ["node", "dist/cli.js", "monitor"]
+    environment:
+      - NODE_ENV=production
+      - SMTP_HOST=${SMTP_HOST:-smtp.gmail.com}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_FROM=${SMTP_FROM}
+    volumes:
+      - sosx-data:/home/sosx/.sosx
+    restart: unless-stopped
+    depends_on:
+      - sosx-app
+
+  # Optional: Redis for enhanced caching
+  redis:
+    image: redis:7-alpine
+    container_name: sosx-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # Optional: PostgreSQL for advanced data storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: sosx-postgres
+    environment:
+      - POSTGRES_DB=sosx
+      - POSTGRES_USER=sosx
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-sosx123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: sosx-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - sosx-app
+      - sosx-stream
+    restart: unless-stopped
+
+volumes:
+  sosx-data:
+    driver: local
+  redis-data:
+    driver: local
+  postgres-data:
+    driver: local
+
+networks:
+  default:
+    name: sosx-network
